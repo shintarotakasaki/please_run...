@@ -82,4 +82,6 @@ def main (uploaded_file):
             wb_demp.active = ws_demp
         except Exception as e:
             st.error(f"エラーが発生しました: {e}")
-
+            
+if __name__ == "__main__":
+    main()
