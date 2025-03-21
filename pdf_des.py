@@ -6,7 +6,7 @@ import tempfile
 
 # PDFからテキストを抽出する関数
 def extract_text_from_pdf(pdf_file, rects):
-    text_list = []
+    str_data = []
     labels = []
     
     # Streamlitでアップロードされたファイルを一時ファイルとして保存
@@ -19,8 +19,8 @@ def extract_text_from_pdf(pdf_file, rects):
             for page in doc:
                 extracted_text = page.get_text("text", clip=rect)
                 text += extracted_text.strip() if extracted_text.strip() else ""
-            text_list.append(text)
-    return text_list, labels
+            str_data.append(text)
+    return str_data, labels
 
 # StreamlitによるGUI
 def main(uploaded_file):
@@ -44,9 +44,9 @@ def main(uploaded_file):
         ]
 
         # テキスト抽出
-        text_list, labels = extract_text_from_pdf(uploaded_file, rects)
+        str_data, labels = extract_text_from_pdf(uploaded_file, rects)
         st.write("抽出されたテキスト:")
-        for label, text in zip(labels, text_list):
+        for label, text in zip(labels, str_data):
             st.write(f"**{label}**: {text}")
 
         # ユーザー入力
@@ -81,7 +81,7 @@ def main(uploaded_file):
                 ws['AB4'] = konpou + "梱包"
 
                 zig_tok = ""
-                for i, text in enumerate(text_list):
+                for i, text in enumerate(str_data):
                     if labels[i] == 'AC9-1':
                         zig_tok = text
                     elif labels[i] == 'AC9':
