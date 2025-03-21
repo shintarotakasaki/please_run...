@@ -14,7 +14,7 @@ import shutil
 # コメントアウトされたコード
 
 def xl_data_upload(uploaded_file):
-    values = []
+    str_data = []
     
     #after_xl = st.file_uploader("アフター申請書エクセルをアップロードしてください")
 
@@ -28,12 +28,12 @@ def xl_data_upload(uploaded_file):
                 rects = ["G19","G20","L15","N20","G21","N21","G23","Q23","H28","AB34"]
 
                 for rect in rects:
-                    values.append(sheet[rect].value)
+                    str_data.append(sheet[rect].value)
 
-                for rect, value in zip(rects, values):
+                for rect, value in zip(rects, str_data):
                     st.write(f"{rect}: {value}")
                 
-                return values
+                return str_data
 
             except Exception as e:
                 st.error(f"エラーが発生しました: {e}")
@@ -48,13 +48,13 @@ def main (uploaded_file):
     """
     GitHubからExcelファイルをダウンロードし、開く関数。
     """
-    values = ""
+    str_data = ""
     xlpoints = ["AC9-1","AC9","AM9","AC11","AC13","AC15","AC19-1","AC19","A11","S11"]
     
     #after_xl = st.file_uploader("アフター申請書エクセルをアップロードしてください")
     
     if uploaded_file is not None:
-        values = xl_data_upload(uploaded_file)
+        str_data = xl_data_upload(uploaded_file)
     
     else:
         st.write("エクセルファイル(.xlsx)をアップロードしてください")
@@ -81,55 +81,3 @@ def main (uploaded_file):
             ws_demp = wb_demp['納品書控(製品)']
             wb_demp.active = ws_demp
 
-            # ここでwb_dempを使って処理を行う
-            # Excelファイルへの書き込み
-            ws_demp["AC17"] = genba
-            ws_demp["AH3"] = syukka
-            ws_demp["AB4"] = konpou + "梱包"
-
-            zig_tok = ""
-            gen_1 = ""
-            for xlpoint, value in zip(xlpoints, values):
-                if xlpoint == "AC9-1":
-                    zig_tok = value
-                elif xlpoint == "AC9":
-                    ws_demp[xlpoint] = str(zig_tok) + '-' + str(value)
-                elif xlpoint == "AM9":
-                    ws_demp[xlpoint] = str(value)[:4]
-                elif xlpoint == "AC11":
-                    ws_demp[xlpoint] = str(value) + "様"
-                elif xlpoint == "AC13":
-                    if value is None:
-                        ws_demp[xlpoint] = "届け先："
-                    else:
-                        ws_demp[xlpoint] = "届け先：" + str(value)
-                elif xlpoint == "AC15":
-                    ws_demp[xlpoint] = str(value) + "様" if value else "=AC11"
-                elif xlpoint == "AC19-1":
-                    gen_1 = value
-                elif xlpoint == "AC19":
-                    ws_demp[xlpoint] = str(gen_1) +"/#"+ str(value)+"#"
-                else:
-                    ws_demp[xlpoint] = str(value)
-
-            # 保存とダウンロード
-            wb_demp.save(file_path)
-            st.success("Excelファイルが上書き保存されました！")                
-
-            #ファイルをダウンロード
-            st.write("保存されたファイルを以下のリンクからダウンロードしてください:")
-            with open(file_path, "rb") as file:
-                st.download_button(
-                    label="ダウンロードする",
-                    data=file,
-                    file_name="伝票(規格品)_ラベル_指示書.xlsm",
-                    mime="application/vnd.ms-excel"
-                )
-            #wb_dempの処理終わり
-
-        except Exception as e:  # 例外が発生した場合の処理
-            st.error(f"エラーが発生しました: {str(e)}")
-
-if __name__ == "__main__":
-    main()
-# ... (他のコードは省略)
