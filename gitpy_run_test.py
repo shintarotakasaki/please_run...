@@ -28,8 +28,8 @@ sys.path.append(REPO_NAME)
 
 # 必要なモジュールを事前にインポート
 try:
-    # xl_des = importlib.import_module('xl_des')
-    # pdf_des = importlib.import_module('pdf_des')
+    xl_des = importlib.import_module('xl_des')
+    pdf_des = importlib.import_module('pdf_des')
     pass
 except ImportError as e:
     st.error(f"モジュールのインポートに失敗しました: {e}")
@@ -38,22 +38,22 @@ except ImportError as e:
 st.title("伝票作成アプリ")
 
 # 現在のディレクトリの名前と構成を表示
-def get_directory_structure(root_dir):
-    structure = {}
-    for root, dirs, files in os.walk(root_dir):
-        structure[root] = {"dirs": dirs, "files": files}
-    return structure
+#def get_directory_structure(root_dir):
+    #structure = {}
+    #for root, dirs, files in os.walk(root_dir):
+        #structure[root] = {"dirs": dirs, "files": files}
+    #return structure
 
-current_dir = os.getcwd()
-st.write(f"Current Directory: {current_dir}")
+#current_dir = os.getcwd()
+#st.write(f"Current Directory: {current_dir}")
 
-directory_structure = get_directory_structure(current_dir)
-for root, content in directory_structure.items():
-    st.write(f"Directory: {root}")
-    st.write("Subdirectories:")
-    st.write(content["dirs"])
-    st.write("Files:")
-    st.write(content["files"])
+#directory_structure = get_directory_structure(current_dir)
+#for root, content in directory_structure.items():
+    #st.write(f"Directory: {root}")
+    #st.write("Subdirectories:")
+    #st.write(content["dirs"])
+    #st.write("Files:")
+    #st.write(content["files"])
 
 # ファイルアップローダー
 uploaded_file = st.file_uploader("ファイルをアップロードしてください")
@@ -62,10 +62,10 @@ if uploaded_file is not None:
     file_mime = uploaded_file.type
 
     if file_mime == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-        # file = BytesIO(uploaded_file.getvalue())
-        # wb = load_workbook(filename=file)
-        # sheet = wb.active
-        # st.write(f"シートタイトル: {sheet.title}")
+        file = BytesIO(uploaded_file.getvalue())
+        wb = load_workbook(filename=file)
+        sheet = wb.active
+        st.write(f"シートタイトル: {sheet.title}")
 
         # xl_des モジュールの関数を実行
         if hasattr(xl_des, 'main'):
@@ -84,3 +84,4 @@ if uploaded_file is not None:
 
     else:
         st.write("エクセルファイル(.xlsx)またはPDFファイルをアップロードしてください")
+    
