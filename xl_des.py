@@ -80,4 +80,6 @@ def main (uploaded_file):
             wb_demp = load_workbook(file_path, keep_vba=True)
             ws_demp = wb_demp['納品書控(製品)']
             wb_demp.active = ws_demp
+        except Exception as e:
+            st.error(f"エラーが発生しました: {e}")
 
