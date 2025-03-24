@@ -69,7 +69,8 @@ if uploaded_file is not None:
 
         # xl_des モジュールの関数を実行
         if hasattr(xl_des, 'main'):
-            xl_des.main(uploaded_file)
+         xl_des.main(uploaded_file):
+            str_data() = xl_des.xl_data_upload(uploaded_file):
         else:
             st.warning("xl_des モジュールに 'main' 関数が見つかりません。")
 
@@ -78,10 +79,12 @@ if uploaded_file is not None:
 
         # pdf_des モジュールの関数を実行
         if hasattr(pdf_des, 'main'):
-            pdf_des.main(uploaded_file)
+            pdf_des.main(uploaded_file):
+            str_data = pdf_des.main(uploaded_file):
         else:
             st.warning("pdf_des モジュールに 'main' 関数が見つかりません。")
 
     else:
         st.write("エクセルファイル(.xlsx)またはPDFファイルをアップロードしてください")
+
     
